@@ -107,7 +107,7 @@ class BatchNormalization(Layer):
         self.called_with = None
 
     def call(self, x, mask=None):
-        if self.mode == 0 or self.mode == 2 or self.mode == 3:
+        if self.mode == 0 or self.mode == 2:
             assert self.built, 'Layer must be built before being called'
             input_shape = self.input_spec[0].shape
 
@@ -122,16 +122,16 @@ class BatchNormalization(Layer):
                     epsilon=self.epsilon)
             else:
                 # mode 0
-                if self.mode == 0 and self.called_with not in {None, x}:
-                    raise Exception('You are attempting to share a '
-                                    'same `BatchNormalization` layer across '
-                                    'different data flows. '
-                                    'This is not possible. '
-                                    'You should use `mode=2` in '
-                                    '`BatchNormalization`, which has '
-                                    'a similar behavior but is shareable '
-                                    '(see docs for a description of '
-                                    'the behavior).')
+                # if self.called_with not in {None, x}:
+                #     raise Exception('You are attempting to share a '
+                #                     'same `BatchNormalization` layer across '
+                #                     'different data flows. '
+                #                     'This is not possible. '
+                #                     'You should use `mode=2` in '
+                #                     '`BatchNormalization`, which has '
+                #                     'a similar behavior but is shareable '
+                #                     '(see docs for a description of '
+                #                     'the behavior).')
                 self.called_with = x
                 x_normed, mean, std = K.normalize_batch_in_training(
                     x, self.gamma, self.beta, reduction_axes,
