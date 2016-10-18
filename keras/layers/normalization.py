@@ -107,7 +107,7 @@ class BatchNormalization(Layer):
         self.called_with = None
 
     def call(self, x, mask=None):
-        if self.mode == 0 or self.mode == 2:
+        if self.mode == 0 or self.mode == 2 or self.mode == 3:
             assert self.built, 'Layer must be built before being called'
             input_shape = self.input_spec[0].shape
 
@@ -122,7 +122,7 @@ class BatchNormalization(Layer):
                     epsilon=self.epsilon)
             else:
                 # mode 0
-                if self.called_with not in {None, x}:
+                if self.mode == 0 and self.called_with not in {None, x}:
                     raise Exception('You are attempting to share a '
                                     'same `BatchNormalization` layer across '
                                     'different data flows. '
